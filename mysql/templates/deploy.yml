@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-deploy
+spec:
+  replicas: 1
+  selector:
+     matchLabels: 
+       app: mysql
+  template:
+    metadata:
+      labels: 
+        app: mysql
+    spec:
+      containers:
+      - name: mysql-container
+        image: {{ .Values.image.name }}:{{ .Values.image.tag }} 
+         #image: muralidhar123/dbmysql:2
+        ports:
+        - containerPort: 3306
+        env:
+        - name: mysql_root_password
+          valueFrom:
+            secretKeyRef:
+              name: mysql-secret
+              key: ROOT_PASSWORD
+                  
